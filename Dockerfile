@@ -6,7 +6,7 @@
 
 # Pull base image.
 #reduce alpine version to avoid innoDB errors with zfs
-FROM jlesage/baseimage:alpine-3.7
+FROM jlesage/baseimage:alpine-3.7-v2.4.3 
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=unknown
@@ -26,9 +26,8 @@ RUN \
         nodejs \
         nginx \
         nginx-mod-stream \
-        mariadb \
-        mariadb-client \
-        mariadb-server-utils \
+        mariadb=10.1.41-r0 \
+        mariadb-client=10.1.41-r0 \
         certbot \
         openssl \
         apache2-utils \
@@ -58,9 +57,8 @@ RUN \
     # nginx always tries to open /var/lib/nginx/logs/error.log before reading
     # its configuration.  Make sure it exists.
     mkdir -p /var/lib/nginx/logs && \
-    ln -sf /config/log/nginx/error.log /var/lib/nginx/logs/error.log && \
+    ln -sf /config/log/nginx/error.log /var/lib/nginx/logs/error.log
     # Make sure mariadb listen on port 3306
-    sed-patch 's/^skip-networking/#skip-networking/' /etc/my.cnf.d/mariadb-server.cnf
 
 # Install Nginx Proxy Manager.
 RUN \
@@ -72,7 +70,6 @@ RUN \
         yarn \
         git \
         python \
-        npm \
         bash \
         && \
 
