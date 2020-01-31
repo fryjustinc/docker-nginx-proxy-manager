@@ -5,6 +5,7 @@
 #
 
 # Pull base image.
+#reduce alpine version to avoid innoDB errors with zfs
 FROM jlesage/baseimage:alpine-3.7
 
 # Docker image version is provided via build arg.
